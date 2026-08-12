@@ -1,59 +1,65 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# URL Shortening Service (Link Kısaltma Servisi)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Bu proje, Laravel tabanlı bir link kısaltma servisidir. Docker entegrasyonu (Laravel Sail) sayesinde herhangi bir yerel bağımlılık (PHP, MySQL, Node.js vb.) yüklemeden Docker üzerinden kolayca çalıştırtırılabilir.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Gereksinimler
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Projenin çalıştırılacağı bilgisayarda aşağıdaki aracın kurulu olması gerekmektedir:
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/) (veya Docker Engine & Compose)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Yeni Bir Bilgisayarda Kurulum ve İlk Çalıştırma
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Projeyi başka bir bilgisayara klonladığınızda veya ilk kez çalıştıracağınızda aşağıdaki adımları sırayla uygulayın:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 1. Ortam Dosyasını Hazırlama
+Projenin ana dizininde bir `.env` dosyası oluşturun (örnek şablondan kopyalayarak):
+```bash
+cp .env.example .env
+```
 
-## Laravel Sponsors
+### 2. Docker Kapsayıcılarını Başlatma
+Docker Desktop uygulamasının açık olduğundan emin olun ve terminalden (PowerShell, CMD veya Git Bash) konteynerleri arka planda başlatın:
+```bash
+docker compose up -d
+```
+*Not: İlk kez çalıştırıldığında imajların indirilmesi ve derlenmesi internet hızınıza bağlı olarak birkaç dakika sürebilir. Sonraki başlatmalarınız 1-2 saniye sürecektir.*
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 3. Bağımlılıkları Yükleme ve Yapılandırma
+Konteynerler ayağa kalktıktan sonra, uygulama içindeki PHP bağımlılıklarını kurun ve ayarları tamamlayın:
 
-### Premium Partners
+```bash
+# Composer paketlerini yükleme
+docker compose exec laravel.test composer install
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# Uygulama anahtarını üretme (APP_KEY)
+docker compose exec laravel.test php artisan key:generate
 
-## Contributing
+# Veritabanı tablolarını oluşturma (Migration)
+docker compose exec laravel.test php artisan migrate
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Frontend paketlerini yükleme
+docker compose exec laravel.test npm install
+```
 
-## Code of Conduct
+Kurulum tamamlandığında tarayıcınızdan **[http://localhost](http://localhost)** adresine giderek projeyi kullanmaya başlayabilirsiniz.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## Geliştirme Sürecinde Sık Kullanılan Komutlar
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Docker ortamında geliştirme yaparken yerel makinenizdeki PHP/npm yerine konteyner içindeki araçları kullanmak için aşağıdaki komutlardan yararlanın:
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| İşlem | Komut |
+| :--- | :--- |
+| **Kapsayıcıları Durdurma** | `docker compose down` |
+| **Kapsayıcıları Yeniden Başlatma** | `docker compose up -d` |
+| **Geliştirme Sunucusu (Vite)** | `docker compose exec laravel.test npm run dev` |
+| **Production Arayüz Derleme** | `docker compose exec laravel.test npm run build` |
+| **Artisan Komutları (Örn: Model)** | `docker compose exec laravel.test php artisan make:model Link` |
+| **Composer Paket Ekleme** | `docker compose exec laravel.test composer require <paket-adi>` |
+| **Veritabanını Sıfırlama** | `docker compose exec laravel.test php artisan migrate:fresh --seed` |
+| **Kapsayıcı İçine Bağlanma (Bash)** | `docker compose exec -it laravel.test bash` |
