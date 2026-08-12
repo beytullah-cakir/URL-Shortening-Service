@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string("referer",2048)->nullable();
             $table->timestamp('visited_at')->useCurrent();
 
+            $table->index(['url_id', 'visited_at']);
+
         });
     }
 
