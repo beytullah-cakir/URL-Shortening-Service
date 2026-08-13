@@ -16,14 +16,15 @@ class Url extends Model
     "click_count",
     "is_active"
     ];
-    
 
 
-    public function users(){
+
+    public function users()
+    {
         return $this->belongsTo(User::class);
     }
 
     public function click_logs() {
-        return $this->hasMany(ClickLog::class); 
+        return $this->hasMany(ClickLog::class);
     }
 }

@@ -5,11 +5,13 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function register(Request $request): JsonResponse
+    public function register(Request $request)
     {
 
         $user = User::create([
@@ -20,33 +22,30 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        /*
         return response()->json([
             'message'      => 'Kullanıcı başarıyla oluşturuldu.',
             'access_token' => $token,
             'token_type'   => 'Bearer',
             'user'         => $user,
-        ], 201);
+        ], 201);*/
+        return redirect()->route("dashboard")->with(["token" => $token]);
     }
 
-    public function login(Request $request): JsonResponse
+    public function login(Request $request)
     {
 
         $user = User::where("email", $request->email)->first();
 
+        if(!$user) throw ValidationException::withMessages(["email" => "Email doesn't exist"]);
+        if (!Hash::check($request->password, $user->password))  throw ValidationException::withMessages(["password" => "Password is not correct"]);
 
 
 
-        if (! $user || Hash::check($request->password, $user->password)) {
-            throw ValidationException();
-        }
+        Auth::login($user);
+        $request->session()->regenerate();
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'message'      => 'Kullanıcı başarıyla giriş yaptı',
-            'access_token' => $token,
-            'token_type'   => 'Bearer',
-        ], 200);
+        return redirect()->route("dashboard");
     }
 
     public function logout(Request $request): JsonResponse{
