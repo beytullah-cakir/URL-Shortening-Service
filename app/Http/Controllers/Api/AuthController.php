@@ -22,13 +22,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        /*
-        return response()->json([
-            'message'      => 'Kullanıcı başarıyla oluşturuldu.',
-            'access_token' => $token,
-            'token_type'   => 'Bearer',
-            'user'         => $user,
-        ], 201);*/
+
         return redirect()->route("dashboard")->with(["token" => $token]);
     }
 

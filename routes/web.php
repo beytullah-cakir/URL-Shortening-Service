@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UrlController;
 use App\Http\Controllers\DashboardController;
+use App\Services\UrlShortenerService;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,3 +27,5 @@ Route::get("/dashboard", [DashboardController::class , "index"])->middleware("au
 Route::post("/register",[AuthController::class, "register"]);
 
 Route::post("/login",[AuthController::class, "login"]);
+
+Route::post("/urls",[UrlController::class, "store"]);

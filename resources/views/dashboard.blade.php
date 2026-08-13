@@ -9,7 +9,7 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-6">
         <div>
 
-            <h1 class="text-3xl font-extrabold text-white tracking-tight">Linklerim</h1>
+            <h1 class="text-3xl font-extrabold text-white tracking-tight"></h1>
         </div>
 
     </div>
@@ -79,7 +79,7 @@
 
         <form action="{{ url('/urls') }}" method="POST" class="space-y-4">
             @csrf
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <!-- Long URL Input -->
                 <div class="lg:col-span-2 space-y-1.5">
                     <label for="original_url" class="block text-xs font-semibold uppercase tracking-wider text-slate-400">
@@ -97,26 +97,11 @@
                     </div>
                 </div>
 
-                <!-- Custom Alias/Short Code -->
-                <div class="space-y-1.5">
-                    <label for="custom_code" class="block text-xs font-semibold uppercase tracking-wider text-slate-400">
-                        Özel Kısa Kod <span class="text-slate-500 font-normal">(İsteğe Bağlı)</span>
-                    </label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500 font-mono text-xs">
-                            /
-                        </div>
-                        <input type="text" name="custom_code" id="custom_code" value="{{ old('custom_code') }}"
-                               placeholder="benim-baglantim"
-                               class="w-full pl-7 pr-4 py-3.5 bg-slate-950/80 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 font-mono-custom text-sm">
-                    </div>
-                </div>
             </div>
 
             <div class="pt-2 flex items-center justify-between">
                 <div class="flex items-center space-x-2 text-xs text-slate-500 font-medium">
-                    <i class="fa-solid fa-circle-question text-indigo-400/80"></i>
-                    <span>Tıklama analizleri için <strong>302 Found</strong> yönlendirme yöntemi uygulanmaktadır.</span>
+
                 </div>
                 <button type="submit" class="w-full sm:w-auto px-8 py-3.5 gradient-btn text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center space-x-2 cursor-pointer">
                     <i class="fa-solid fa-circle-chevron-right"></i>
