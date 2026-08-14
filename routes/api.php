@@ -7,9 +7,12 @@ Route::post("/login", [AuthController::class, "login"]);
 Route::post("/register", [AuthController::class, "register"]);
 
 Route::middleware("auth:sanctum")->group(function () {
-    Route::post("/urls", [UrlController::class, "saveURL"]);
+    Route::post("/urls", [UrlController::class, "store"]);
     Route::get("/urls", [UrlController::class, "index"]);
     Route::get("/me", [AuthController::class, "me"]);
     Route::post("/logout", [AuthController::class, "logout"]);
+    Route::get("/urls/{id}", [UrlController::class, "show"]);
+    Route::post("/urls/{id}", [UrlController::class, "update"]);
+    Route::delete("/urls/{id}", [UrlController::class, "delete"]);
 });
 

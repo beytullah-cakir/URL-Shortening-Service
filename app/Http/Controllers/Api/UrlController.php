@@ -10,10 +10,18 @@ use Illuminate\Support\Facades\Auth;
 
 class UrlController extends Controller
 {
-   public function saveURL(Request $request){
+   public function store(Request $request){
+
+       $validation = $request->validate([
+           "url" => [
+               "required",
+               "url",
+               "max:2048"
+           ]
+       ]);
 
        $url=Url::create([
-           'original_url'=>$request->input('original_url'),
+           'original_url'=>$validation["original_url"],
            "user_id"=>auth()->id(),
            "is_active"=>1
        ]);
@@ -39,9 +47,55 @@ class UrlController extends Controller
 
    }
 
-
-   public  function deleteURL()
+   public function show(int $id)
    {
+       $url=Url::where("id",$id)->where("user_id",auth()->id())->firstOrFail();
 
+       return response()->json([
+           "message"=>"url broud succesfully",
+           "url"=>$url
+       ]);
+   }
+
+
+   public function update(Request $request, int $id){
+       $validation = $request->validate([
+           "original_url" => [
+               "required",
+               "max:2048",
+                "url"
+           ],
+           "is_active" => [
+               "integer",
+           ]
+
+       ]);
+
+       $url=Url::where("id",$id)->where("user_id",auth()->id())->firstOrFail();
+
+       $url->update([
+           "original_url"=>$validation["original_url"],
+           "is_active"=>$validation["is_active"]
+       ]);
+
+       return response()->json([
+           "message"=>"url broud succesfully",
+           "original_url"=>$url->original_url,
+       ]);
+
+
+
+   }
+
+
+   public  function delete(int $id)
+   {
+        $url=Url::where("id",$id)->where("user_id",\auth()->id())->firstOrFail();
+
+        $url->delete();
+
+        return response()->json([
+           "message"=>"url broud succesfully"
+        ]);
    }
 }
