@@ -13,10 +13,34 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
+        $validatedData=$request->validate([
+            'name'=>[
+                'required',
+                'string',
+                'min:3',
+                'max:255',
+            ],
+            'email'=>[
+                'required',
+                'string',
+                'email',
+                'max:255',
+                'unique:users,email',
+
+            ],
+            'password'=>[
+                'required',
+                'confirmed',
+                'min:8',
+
+            ]
+        ]);
+
+
         $user = User::create([
-            "name"     => $request->name,
-            "email"    => $request->email,
-            "password" => Hash::make($request->password),
+            "name"     =>$validatedData['name'],
+            "email"    => $validatedData['email'],
+            "password" => Hash::make($validatedData['password']),
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -32,10 +56,25 @@ class AuthController extends Controller
     public function login(Request $request)
     {
 
-        $user = User::where("email", $request->email)->first();
+        $validatedData=$request->validate([
+            'email'=>[
+                'required',
+                'string',
+                'email',
+                'max:255',
+                'exists:users,email',
+            ],
+            'password'=>[
+                'required',
+                'min:8',
 
-        if(!$user) throw ValidationException::withMessages(["email" => "Email doesn't exist"]);
-        if (!Hash::check($request->password, $user->password))  throw ValidationException::withMessages(["password" => "Password is not correct"]);
+            ]
+        ]);
+
+        $user = User::where("email", $validatedData["email"])->first();
+
+
+        if (!Hash::check($validatedData["password"], $user->password))  throw ValidationException::withMessages(["password" => "Password is not correct"]);
 
 
 
@@ -58,5 +97,11 @@ class AuthController extends Controller
         return response()->json([
             'message'=> 'kullanıcı çıkış yaptı']);
 
+    }
+
+
+    public function me()
+    {
+        return response()->json(auth()->user());
     }
 }
