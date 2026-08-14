@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UrlController extends Controller
 {
-   public function store(Request $request, UrlShortenerService $urlShortenerService){
+   public function saveURL(Request $request){
 
        $url=Url::create([
            'original_url'=>$request->input('original_url'),
@@ -19,10 +19,29 @@ class UrlController extends Controller
        ]);
 
 
-       $url->short_code=$urlShortenerService->encode($url->id);
+       $url->short_code=UrlShortenerService::encode($url->id);
        $url->save();
 
-       return redirect()->route("dashboard");
+       return response()->json([
+           "message"=>"Url saved successfully",
+           "original_url"=>$url->original_url,
+           "short_code"=>$url->short_code,
+       ]);
+
+   }
+
+   public function index()
+   {
+       return response()->json([
+           "message"=>"url brough succesfully",
+           "urls"=>\auth()->user()->urls()->get()
+       ]);
+
+   }
+
+
+   public  function deleteURL()
+   {
 
    }
 }

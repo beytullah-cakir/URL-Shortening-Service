@@ -13,7 +13,6 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-
         $user = User::create([
             "name"     => $request->name,
             "email"    => $request->email,
@@ -22,8 +21,12 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        return response()->json([
+            "user" => $user,
+            "token" => $token,
+            "message" => "Register successfully"
+        ]);
 
-        return redirect()->route("dashboard")->with(["token" => $token]);
     }
 
     public function login(Request $request)
@@ -36,15 +39,22 @@ class AuthController extends Controller
 
 
 
-        Auth::login($user);
-        $request->session()->regenerate();
 
-        return redirect()->route("dashboard");
+
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'user' => $user,
+            'token' => $token,
+            'message' => 'Login successfully',
+        ]);
     }
 
     public function logout(Request $request): JsonResponse{
 
         $request->user()->currentAccessToken()->delete();
+
         return response()->json([
             'message'=> 'kullanıcı çıkış yaptı']);
 

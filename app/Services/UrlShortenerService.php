@@ -9,7 +9,7 @@ class UrlShortenerService
     // Base62 Karakter Seti (0-9, a-z, A-Z)
     private const CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    public function encode(int $id): string
+    public static function encode(int $id): string
     {
         $base = strlen(self::CHARS);
         $code = '';
