@@ -68,7 +68,7 @@ class UrlController extends Controller
                 "url"
            ],
            "is_active" => [
-               "integer",
+               "boolean",
            ]
 
        ]);
