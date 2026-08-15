@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Url extends Model
 {
-    use HasFactory;
+    //use HasFactory;
 
     public $timestamps = false;
+
 
     protected $fillable = [
     "user_id",

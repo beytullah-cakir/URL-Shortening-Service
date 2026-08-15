@@ -13,7 +13,7 @@ class UrlController extends Controller
    public function store(Request $request){
 
        $validation = $request->validate([
-           "url" => [
+           "original_url" => [
                "required",
                "url",
                "max:2048"
@@ -47,9 +47,9 @@ class UrlController extends Controller
 
    }
 
-   public function show(int $id)
+   public function show(Url $url)
    {
-       $url=Url::where("id",$id)->where("user_id",auth()->id())->firstOrFail();
+       $this->authorize('view', $url);
 
        return response()->json([
            "message"=>"url broud succesfully",
@@ -58,7 +58,7 @@ class UrlController extends Controller
    }
 
 
-   public function update(Request $request, int $id){
+   public function update(Request $request, Url $url){
        $validation = $request->validate([
            "original_url" => [
                "required",
@@ -71,11 +71,12 @@ class UrlController extends Controller
 
        ]);
 
-       $url=Url::where("id",$id)->where("user_id",auth()->id())->firstOrFail();
+       $this->authorize("update", $url);
+
 
        $url->update([
            "original_url"=>$validation["original_url"],
-           "is_active"=>$validation["is_active"]
+           "is_active"=>$validation["is_active"] ?? $url->is_active
        ]);
 
        return response()->json([
@@ -88,9 +89,9 @@ class UrlController extends Controller
    }
 
 
-   public  function delete(int $id)
+   public  function delete(Url $url)
    {
-        $url=Url::where("id",$id)->where("user_id",\auth()->id())->firstOrFail();
+        $this->authorize('delete', $url);
 
         $url->delete();
 

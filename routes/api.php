@@ -11,8 +11,8 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::get("/urls", [UrlController::class, "index"]);
     Route::get("/me", [AuthController::class, "me"]);
     Route::post("/logout", [AuthController::class, "logout"]);
-    Route::get("/urls/{id}", [UrlController::class, "show"]);
-    Route::post("/urls/{id}", [UrlController::class, "update"]);
-    Route::delete("/urls/{id}", [UrlController::class, "delete"]);
+    Route::get("/urls/{url}", [UrlController::class, "show"]);
+    Route::post("/urls/{url}", [UrlController::class, "update"]);
+    Route::delete("/urls/{url}", [UrlController::class, "delete"]);
 });
 
