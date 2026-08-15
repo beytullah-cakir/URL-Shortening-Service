@@ -19,7 +19,7 @@ class UrlRedirectController extends Controller
             "url_id" => $url->id,
             "ip_address" => request()->ip(),
             "user_agent" => request()->userAgent(),
-            "referer" => request()->fullUrl(),
+            "referer" => request()->headers->get('referer'),
             "visited_at" => now(),
         ]);
 

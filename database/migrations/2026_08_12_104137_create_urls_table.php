@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('urls', function (Blueprint $table) {
             $table->id();
             $table->text("original_url");
-            $table->string("short_code",10)->unique()->default(0)->nullable();
+            $table->string("short_code", 10)->unique()->nullable();
             $table->bigInteger("click_count")->default(0)->nullable();
             $table->boolean("is_active")->default(true);
             $table->foreignId("user_id")->constrained()->onDelete("cascade"); // it was linked to the id in the users table
