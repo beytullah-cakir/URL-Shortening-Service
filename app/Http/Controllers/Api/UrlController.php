@@ -51,6 +51,8 @@ class UrlController extends Controller
    {
        $this->authorize('view', $url);
 
+       $url->load("click_logs");
+
        return response()->json([
            "message"=>"url broud succesfully",
            "url"=>$url
