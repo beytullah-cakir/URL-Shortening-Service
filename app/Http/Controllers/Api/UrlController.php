@@ -42,7 +42,7 @@ class UrlController extends Controller
    {
        return response()->json([
            "message"=>"url brough succesfully",
-           "urls"=>\auth()->user()->urls()->get()
+           "urls"=>auth()->user()->urls()->get()
        ]);
 
    }
