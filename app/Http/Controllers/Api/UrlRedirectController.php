@@ -11,7 +11,7 @@ class UrlRedirectController extends Controller
 {
     public function redirect(string $short_code, Request $request)
     {
-        $url=Url::where("short_code",$short_code)->where("is_active",1)->firstOrFail();
+        $url = Url::where("short_code", $short_code)->where("is_active", true)->firstOrFail();
 
         $url->increment('click_count');
 
@@ -19,7 +19,7 @@ class UrlRedirectController extends Controller
             "url_id" => $url->id,
             "ip_address" => request()->ip(),
             "user_agent" => request()->userAgent(),
-            "referer" => request()->fullUrl(),
+            "referer" => request()->headers->get('referer'),
             "visited_at" => now(),
         ]);
 
