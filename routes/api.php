@@ -17,5 +17,6 @@ Route::middleware("auth:sanctum")->group(function () {
     Route::get("/urls/{url}", [UrlController::class, "show"]);
     Route::post("/urls/{url}", [UrlController::class, "update"]);
     Route::delete("/urls/{url}", [UrlController::class, "delete"]);
+    Route::get("/urls/{url}/analytics", [UrlController::class, "analytics"]);
 });
 
